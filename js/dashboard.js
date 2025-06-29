@@ -6,6 +6,9 @@ class Dashboard {
         this.closeSidebarBtn = document.getElementById('closeSidebar');
         this.notificationsBtn = document.getElementById('notificationsBtn');
         this.logoutBtn = document.getElementById('logoutBtn');
+        this.logoutModal = document.getElementById('logoutModal');
+        this.confirmLogout = document.getElementById('confirmLogout');
+        this.cancelLogout = document.getElementById('cancelLogout');
         this.init();
     }
 
@@ -22,7 +25,7 @@ class Dashboard {
         this.sidebarOverlay.addEventListener('click', this.closeSidebar.bind(this));
 
         // Logout
-        this.logoutBtn.addEventListener('click', this.handleLogout.bind(this));
+        this.logoutBtn.addEventListener('click', this.showLogoutModal.bind(this));
 
         // Notifications
         this.notificationsBtn.addEventListener('click', this.showNotifications.bind(this));
@@ -85,11 +88,15 @@ class Dashboard {
         alert('Mostrando notificaciones...');
     }
 
+    showLogoutModal() {
+        this.logoutModal.classList.remove('hidden');
+    }
+
     handleLogout() {
         // Simular logout
         if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
             localStorage.removeItem('authToken');
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     }
 }
@@ -98,3 +105,25 @@ class Dashboard {
 document.addEventListener('DOMContentLoaded', () => {
     new Dashboard();
 });
+
+// Mostrar modal al hacer clic en "Cerrar Sesión"
+if (logoutBtn && logoutModal) {
+    logoutBtn.addEventListener('click', () => {
+        logoutModal.classList.remove('hidden');
+    });
+}
+
+// Confirmar cierre de sesión
+if (confirmLogout) {
+    confirmLogout.addEventListener('click', () => {
+        localStorage.removeItem('usuarioActivo');
+        window.location.href = 'index.html'; // Cambia a 'login.html' si tu login está en otro archivo
+    });
+}
+
+// Cancelar cierre de sesión
+if (cancelLogout) {
+    cancelLogout.addEventListener('click', () => {
+        logoutModal.classList.add('hidden');
+    });
+}

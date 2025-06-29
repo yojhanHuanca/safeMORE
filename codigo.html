@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mi Código - SafeTECS</title>
+    <link rel="stylesheet" href="css/codigo.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="codigo-container">
+        <div class="codigo-card">
+            <div class="codigo-icon">
+                <span class="material-icons">qr_code</span>
+            </div>
+            <h1>Mi Código de Acceso</h1>
+            <p>Presenta este código para registrar tu acceso.</p>
+            <div id="barcode"></div>
+            <div class="codigo-info" id="codigoInfo"></div>
+            <a href="dashboard.html" class="volver-link">← Volver al inicio</a>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
+    <script>
+        // Obtener usuario activo
+        const usuario = JSON.parse(localStorage.getItem('usuarioActivo'));
+        const codigo = usuario && usuario.codigo ? usuario.codigo : '00000000';
+        const nombre = usuario && usuario.nombre ? usuario.nombre : 'Usuario';
+
+        // Mostrar info
+        document.getElementById('codigoInfo').textContent = `${nombre} | Código: ${codigo}`;
+
+        // Generar código de barras
+        const barcodeDiv = document.getElementById('barcode');
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.id = "barcodeSVG";
+        barcodeDiv.appendChild(svg);
+        JsBarcode("#barcodeSVG", codigo, {
+            format: "CODE128",
+            lineColor: "#222",
+            width: 2,
+            height: 80,
+            displayValue: true
+        });
+    </script>
+</body>
+</html>

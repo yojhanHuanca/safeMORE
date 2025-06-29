@@ -1,0 +1,115 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: #f5f6fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.acceso-container {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.acceso-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
+    padding: 2.5rem 2rem 2rem 2rem;
+    max-width: 350px;
+    width: 100%;
+    text-align: center;
+}
+
+.acceso-icon {
+    background: #007bff;
+    color: #fff;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem auto;
+    font-size: 2.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.3s;
+}
+.salida .acceso-icon {
+    background: #28a745;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #222;
+}
+
+p {
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+.btn-acceso {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 0.8rem 2.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 1.2rem;
+}
+.btn-acceso.salida {
+    background: #28a745;
+}
+.btn-acceso:disabled {
+    background: #b2bec3;
+    cursor: not-allowed;
+}
+
+.acceso-msg {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #27ae60;
+    font-weight: 500;
+    display: block;
+    min-height: 24px;
+}
+
+.volver-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.98rem;
+    transition: color 0.2s;
+}
+.volver-link:hover {
+    color: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .acceso-card {
+        padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+        max-width: 98vw;
+    }
+    h1 {
+        font-size: 1.1rem;
+    }
+    .acceso-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+}

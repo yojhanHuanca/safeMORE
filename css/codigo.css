@@ -1,0 +1,99 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    background: #f5f6fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.codigo-container {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.codigo-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
+    padding: 2.5rem 2rem 2rem 2rem;
+    max-width: 350px;
+    width: 100%;
+    text-align: center;
+}
+
+.codigo-icon {
+    background: #ffc107;
+    color: #fff;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem auto;
+    font-size: 2.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #222;
+}
+
+p {
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+#barcode {
+    margin: 1.2rem 0 0.5rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.codigo-info {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+.volver-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.98rem;
+    transition: color 0.2s;
+}
+.volver-link:hover {
+    color: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .codigo-card {
+        padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+        max-width: 98vw;
+    }
+    h1 {
+        font-size: 1.1rem;
+    }
+    .codigo-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+    }
+    #barcode svg {
+        width: 90vw !important;
+        height: 60px !important;
+    }
+}

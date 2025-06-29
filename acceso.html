@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Registrar Acceso - SafeTECS</title>
+    <link rel="stylesheet" href="css/acceso.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        #barcode {
+            margin: 1.2rem auto 0.5rem auto;
+            display: none;
+            justify-content: center;
+        }
+        #contador {
+            font-size: 1.2rem;
+            color: #007bff;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <main class="acceso-container">
+        <div class="acceso-card">
+            <div class="acceso-icon" id="accesoIcon">
+                <span class="material-icons">login</span>
+            </div>
+            <h1 id="accesoTitle">Registrar Entrada</h1>
+            <p id="accesoDesc">Confirma tu entrada al campus</p>
+            <button class="btn-acceso" id="btnRegistrar">Registrar</button>
+            <div id="contador"></div>
+            <div id="barcode"></div>
+            <div class="acceso-msg" id="accesoMsg"></div>
+            <a href="dashboard.html" class="volver-link">← Volver al inicio</a>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
+    <script>
+        // Cambia el contenido según el tipo de acceso
+        const params = new URLSearchParams(window.location.search);
+        const tipo = params.get('tipo') || 'entrada';
+        const icon = document.getElementById('accesoIcon').querySelector('.material-icons');
+        const title = document.getElementById('accesoTitle');
+        const desc = document.getElementById('accesoDesc');
+        const btn = document.getElementById('btnRegistrar');
+        const msg = document.getElementById('accesoMsg');
+        const barcodeDiv = document.getElementById('barcode');
+        const contadorDiv = document.getElementById('contador');
+
+        if (tipo === 'salida') {
+            icon.textContent = 'logout';
+            title.textContent = 'Registrar Salida';
+            desc.textContent = 'Confirma tu salida del campus';
+            btn.textContent = 'Registrar Salida';
+            btn.classList.add('salida');
+        }
+
+        // Obtener el código del usuario activo
+        const usuario = JSON.parse(localStorage.getItem('usuarioActivo'));
+        const codigo = usuario && usuario.codigo ? usuario.codigo : '00000000';
+
+        btn.addEventListener('click', () => {
+            btn.style.display = 'none';
+            msg.textContent = '';
+            // Mostrar el código de barras y el contador
+            barcodeDiv.style.display = 'flex';
+            contadorDiv.style.display = 'block';
+
+            // Crear el SVG para el código de barras
+            barcodeDiv.innerHTML = '<svg id="barcodeSVG"></svg>';
+            JsBarcode("#barcodeSVG", codigo, {
+                format: "CODE128",
+                lineColor: "#222",
+                width: 2,
+                height: 80,
+                displayValue: true
+            });
+
+            let tiempo = 10;
+            contadorDiv.textContent = `Muestra tu código al lector (${tiempo}s)`;
+            const intervalo = setInterval(() => {
+                tiempo--;
+                contadorDiv.textContent = `Muestra tu código al lector (${tiempo}s)`;
+                if (tiempo <= 0) {
+                    clearInterval(intervalo);
+                    barcodeDiv.style.display = 'none';
+                    contadorDiv.style.display = 'none';
+                    msg.textContent = tipo === 'salida'
+                        
+                    msg.className = 'acceso-msg success';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

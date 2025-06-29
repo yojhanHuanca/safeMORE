@@ -54,6 +54,12 @@ class HistoryManager {
         this.elements.endDate.valueAsDate = today;
         this.elements.startDate.max = today.toISOString().split('T')[0];
         this.elements.endDate.max = today.toISOString().split('T')[0];
+        
+        const usuario = JSON.parse(localStorage.getItem('usuarioActivo'));
+        if (usuario && usuario.rol === 'administrativo') {
+            document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+            // Aquí puedes habilitar más controles para admin
+        }
     }
 
     async loadData() {
@@ -145,7 +151,7 @@ class HistoryManager {
                         <span class="material-icons">${item.type === 'entry' ? 'login' : 'logout'}</span>
                     </div>
                     <div class="access-info">
-                        <h3>${item.type === 'entry' ? 'Entrada' : 'Salida'} - ${item.location}</h3>
+                        <h3>${item.type === 'entry' ? 'Entrada' : 'Salida'}</h3>
                         <p>${formattedDate} · ${time}</p>
                     </div>
                     <span class="access-status">${item.status === 'success' ? '✓' : '✗'}</span>
@@ -236,4 +242,108 @@ document.addEventListener('DOMContentLoaded', () => {
             historyManager.openModal();
         }
     });
+    
+    const accessList = document.getElementById('accessList');
+    const loadingState = document.getElementById('loadingState');
+    
+    // Simulación de historial realista y profesional
+    const estados = [
+        { status: "success", label: "✓", text: "Correcto" },
+        { status: "error", label: "✗", text: "Denegado" },
+        { status: "entry", label: "!", text: "Tardanza" }
+    ];
+
+    function randomHora(tipo) {
+        if (tipo === "entry") {
+            // Entradas entre 07:30 y 09:00
+            const h = 7 + Math.floor(Math.random() * 2);
+            const m = Math.floor(Math.random() * 60);
+            return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+        } else {
+            // Salidas entre 12:30 y 14:00
+            const h = 12 + Math.floor(Math.random() * 2);
+            const m = Math.floor(Math.random() * 60);
+            return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+        }
+    }
+
+    function randomEstado(tipo) {
+        if (tipo === "entry" && Math.random() < 0.1) return estados[2]; // 10% tardanza
+        if (Math.random() < 0.05) return estados[1]; // 5% denegado
+        return estados[0]; // Correcto
+    }
+
+    function randomFechaDiasAtras(dias) {
+        const d = new Date();
+        d.setDate(d.getDate() - dias);
+        return d;
+    }
+
+    function formatoFechaHora(fecha, hora) {
+        const [h, m] = hora.split(":");
+        fecha.setHours(h, m);
+        return fecha.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) +
+            ' · ' +
+            fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    // Genera historial de los últimos 10 días
+    let historial = [];
+    for (let i = 0; i < 10; i++) {
+        // Entrada
+        const fecha = randomFechaDiasAtras(i);
+        const tipo = "entry";
+        const hora = randomHora(tipo);
+        const estado = randomEstado(tipo);
+        historial.push({
+            tipo: "Entrada",
+            fechaHora: formatoFechaHora(new Date(fecha), hora),
+            status: estado.status,
+            statusLabel: estado.label,
+            statusText: estado.text
+        });
+        // Salida
+        const tipo2 = "exit";
+        const hora2 = randomHora(tipo2);
+        const estado2 = randomEstado(tipo2);
+        historial.push({
+            tipo: "Salida",
+            fechaHora: formatoFechaHora(new Date(fecha), hora2),
+            status: estado2.status,
+            statusLabel: estado2.label,
+            statusText: estado2.text
+        });
+    }
+    
+    // Ordena por fecha descendente
+    historial.sort((a, b) => new Date(b.fechaHora.split('·')[0]) - new Date(a.fechaHora.split('·')[0]));
+    
+    // Renderiza historial
+    function renderHistorial(data) {
+        accessList.innerHTML = "";
+        if (data.length === 0) {
+            accessList.innerHTML = "<div class='access-item'><div class='access-info'><h3>No hay registros</h3></div></div>";
+            return;
+        }
+        data.forEach(item => {
+            accessList.innerHTML += `
+                <div class="access-item ${item.status} ${item.tipo === "Entrada" ? "entry" : "exit"}">
+                    <div class="access-icon">
+                        <span class="material-icons">${item.tipo === "Entrada" ? "login" : "logout"}</span>
+                    </div>
+                    <div class="access-info">
+                        <h3>${item.tipo}</h3>
+                        <p>${item.fechaHora}</p>
+                    </div>
+                    <span class="access-status" title="${item.statusText}">${item.statusLabel}</span>
+                </div>
+            `;
+        });
+    }
+    
+    // Simula carga
+    setTimeout(() => {
+        loadingState.style.display = "none";
+        renderHistorial(historial);
+    }, 900);
 });

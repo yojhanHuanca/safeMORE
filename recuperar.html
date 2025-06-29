@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Recuperar Contraseña - SafeTECS</title>
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <main class="auth-container">
+        <div class="auth-card">
+            <h1>Recuperar Contraseña</h1>
+            <form id="recuperarForm">
+                <div class="input-group floating">
+                    <input type="email" id="correo" name="correo" required>
+                    <label for="correo">Correo registrado</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-rounded">Enviar código</button>
+                <div id="mensaje" style="margin-top:10px;"></div>
+            </form>
+            <a href="index.html" class="volver-link">← Volver al inicio</a>
+        </div>
+    </main>
+    <script>
+        document.getElementById('recuperarForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const correo = document.getElementById('correo').value.trim();
+            const mensaje = document.getElementById('mensaje');
+            mensaje.textContent = "Enviando correo...";
+            // Llama a tu backend para enviar el código de recuperación
+            const res = await fetch('/api/recuperar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ correo })
+            });
+            const data = await res.json();
+            mensaje.textContent = data.ok
+                ? "Revisa tu correo para continuar."
+                : "No se encontró ese correo.";
+        });
+    </script>
+</body>
+</html>
